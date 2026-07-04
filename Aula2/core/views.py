@@ -11,3 +11,14 @@ class ListaTarefasAPIView(APIView):
         serializer = TarefaSerializer(tarefas, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ContagemTarefasAPIView(APIView):
+    def get(self, request):
+        total = Tarefa.objects.count()
+        concluidas = Tarefa.objects.filter(concluida=True).count()
+        pendentes = total - concluidas
+        return Response(    {
+            'total': total,
+            'concluidas': concluidas,
+            'pendentes': pendentes
+        }   )
